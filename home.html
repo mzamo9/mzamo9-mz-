@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redline Rush - Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      color: red;
+      background-image: url('assets/images/galaxy.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+      gap: 15px;
+      text-align: center;
+      max-height: 100vh;
+      overflow-y: scroll;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .fade-out {
+      animation: fadeOut 1s forwards;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+
+    .menu::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .menu::-webkit-scrollbar-thumb {
+      background-color: red;
+      border-radius: 10px;
+    }
+
+    .menu h1 {
+      font-size: 36px;
+      color: red;
+      text-shadow: 0 0 15px red, 0 0 30px red;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: transparent;
+      border: 2px solid red;
+      color: red;
+      font-size: 16px;
+      padding: 8px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      animation: neonFlicker 2s infinite alternate;
+    }
+
+    button:hover {
+      background-color: rgba(255, 0, 0, 0.1);
+      box-shadow: 0 0 10px red;
+    }
+
+    @keyframes neonFlicker {
+      0%, 100% {
+        text-shadow: 0 0 5px red, 0 0 10px red;
+      }
+      50% {
+        text-shadow: 0 0 15px red, 0 0 30px red;
+      }
+    }
+
+    .mute-button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <div class="menu">
+    <h1>Redline Rush</h1>
+    <button onclick="startGame()">Start</button>
+    <button onclick="resumeGame()">Resume</button>
+    <button onclick="showOptions()">Options</button>
+    <button onclick="showControls()">Controls</button>
+    <button onclick="restartGame()">Restart</button>
+    <button onclick="exitGame()">Exit</button>
+    <button class="mute-button" onclick="toggleMute()">
+      🔇 <span id="muteLabel">Unmute</span>
+    </button>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="assets/menu-music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const muteLabel = document.getElementById('muteLabel');
+    let isMuted = true;
+    music.muted = true; // Default muted
+    music.play().catch(() => {}); // Attempt play (some browsers may block it)
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      music.muted = isMuted;
+      muteLabel.textContent = isMuted ? "Unmute" : "Mute";
+      if (!music.paused && !isMuted) {
+        music.play();
+      }
+    }
+
+    function fadeOutMusic(duration = 1000) {
+      const stepTime = 50;
+      const steps = duration / stepTime;
+      let volume = music.volume;
+      const volumeStep = volume / steps;
+
+      const fadeInterval = setInterval(() => {
+        volume -= volumeStep;
+        if (volume <= 0) {
+          music.volume = 0;
+          music.pause();
+          clearInterval(fadeInterval);
+        } else {
+          music.volume = volume;
+        }
+      }, stepTime);
+    }
+
+    function startGame() {
+      localStorage.setItem('playGameMusic', 'true'); // For game-play.html
+      const menu = document.querySelector('.menu');
+      menu.classList.add('fade-out');
+      fadeOutMusic();
+
+      setTimeout(() => {
+        window.location.href = "game-play.html";
+      }, 1000);
+    }
+
+    function resumeGame() {
+      alert("Resuming game...");
+    }
+
+    function showOptions() {
+      alert("Options coming soon...");
+    }
+
+    function showControls() {
+      alert("Controls:\nArrow Keys or WASD to fly\nSpacebar to shoot");
+    }
+
+    function restartGame() {
+      alert("Game restarted.");
+    }
+
+    function exitGame() {
+      fadeOutMusic();
+      alert("Thanks for playing Redline Rush!");
+    }
+  </script>
+</body>
+</html>

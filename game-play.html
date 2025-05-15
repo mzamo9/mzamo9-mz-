@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redline Rush - Gameplay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      color: red;
+      background-image: url('assets/images/galaxy.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    .gameplay {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+      gap: 15px;
+      text-align: center;
+      max-height: 100vh;
+      overflow-y: scroll;
+      scrollbar-width: thin;
+      scrollbar-color: red black;
+    }
+
+    .gameplay::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .gameplay::-webkit-scrollbar-thumb {
+      background-color: red;
+      border-radius: 10px;
+    }
+
+    .gameplay h1 {
+      font-size: 36px;
+      color: red;
+      text-shadow: 0 0 15px red, 0 0 30px red;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: transparent;
+      border: 2px solid red;
+      color: red;
+      font-size: 16px;
+      padding: 8px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      animation: neonFlicker 2s infinite alternate;
+    }
+
+    button:hover {
+      background-color: rgba(255, 0, 0, 0.1);
+      box-shadow: 0 0 10px red;
+    }
+
+    @keyframes neonFlicker {
+      0%, 100% {
+        text-shadow: 0 0 5px red, 0 0 10px red;
+      }
+      50% {
+        text-shadow: 0 0 15px red, 0 0 30px red;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <div class="gameplay">
+    <h1>Redline Rush - Gameplay</h1>
+    <button onclick="startGame()">Start Game</button>
+    <button onclick="pauseGame()">Pause Game</button>
+    <button onclick="endGame()">End Game</button>
+  </div>
+
+  <!-- In-Game Music (starts when Start button is clicked) -->
+  <audio id="inGameMusic" loop>
+    <source src="assets/in-game-music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const inGameMusic = document.getElementById('inGameMusic');
+
+    function startGame() {
+      inGameMusic.play();
+      alert("Game Started!");
+      // Add your game logic here
+    }
+
+    function pauseGame() {
+      inGameMusic.pause();
+      alert("Game Paused!");
+    }
+
+    function endGame() {
+      inGameMusic.pause();
+      inGameMusic.currentTime = 0;
+      alert("Game Over!");
+    }
+  </script>
+</body>
+</html>
